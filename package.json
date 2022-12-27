@@ -2,20 +2,28 @@
   "name": "sum-chum",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://projects.ollybritton.com/SumChum",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "easy-speech": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
+    "react-speech-kit": "^3.0.1",
+    "tachyons": "^4.12.0",
+    "tachyons-cli": "^1.3.3",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "css": "tachyons src/css/app.css > src/index.css --minify",
+    "prestart": "npm run css",
+    "prebuild": "npm run css"
   },
   "eslintConfig": {
     "extends": [

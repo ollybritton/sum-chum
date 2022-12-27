@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import Header from "./components/Header";
+import Addition from "./generators/basicMath/addition";
+import Multiplication from "./generators/basicMath/multiplication";
+import Study from "./Study";
+import EasySpeech from "easy-speech";
+import Subtraction from "./generators/basicMath/subtraction";
+import Division from "./generators/basicMath/division";
+import NimberAddition from "./generators/unusual/nimber-addition";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      config: [
+        { generator: Addition, weight: 5 },
+        { generator: Multiplication, weight: 5 },
+        { generator: Subtraction, weight: 5 },
+        { generator: Division, weight: 5 },
+        { generator: NimberAddition, weight: 5 },
+      ],
+    };
+  }
+
+  componentDidMount() {
+    EasySpeech.init({ maxTimeout: 5000, interval: 250 })
+      .then(() => console.debug("Speech synthesis loaded."))
+      .catch((e) => console.error(e));
+
+    EasySpeech.defaults({
+      voice: EasySpeech.voices().find((voice) => voice.lang.startsWith("en")),
+    });
+  }
+
+  render() {
+    return (
+      <div className="App">
+        <Header />
+        <Study config={this.state.config} />
+      </div>
+    );
+  }
 }
 
 export default App;
