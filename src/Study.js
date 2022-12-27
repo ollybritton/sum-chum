@@ -12,8 +12,10 @@ export default class Study extends Component {
   }
 
   async ask() {
+    EasySpeech.defaults({ voice: this.props.settings.voice });
+
     let generator = weightedRandomChoice(
-      this.props.config,
+      this.props.settings.generators,
       (x) => x.weight
     ).generator;
     let args = Object.assign(
@@ -23,16 +25,25 @@ export default class Study extends Component {
     let exercise = generator.generator(args);
 
     await EasySpeech.speak({ text: exercise.questionSaid });
-    await sleep(3000);
-    await EasySpeech.speak({ text: exercise.questionSaid });
+
+    if (this.props.settings.shouldRepeatQuestion) {
+      await sleep(this.props.settings.repeatQuestionDelay * 1000);
+      await EasySpeech.speak({ text: exercise.questionSaid });
+    }
+
     await sleep(exercise.answerSaidDelay * 1000);
     await EasySpeech.speak({ text: exercise.answerSaid });
+
+    if (this.props.settings.shouldRepeatAnswer) {
+      await sleep(this.props.settings.repeatAnswerDelay * 1000);
+      await EasySpeech.speak({ text: exercise.answerSaid });
+    }
   }
 
   async loop() {
     while (this.state.shouldLoop) {
       await this.ask();
-      await sleep(10000);
+      await sleep(this.props.settings.timeBetweenQuestions * 1000);
     }
   }
 

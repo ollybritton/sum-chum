@@ -7,37 +7,53 @@ import EasySpeech from "easy-speech";
 import Subtraction from "./generators/basicMath/subtraction";
 import Division from "./generators/basicMath/division";
 import NimberAddition from "./generators/unusual/nimber-addition";
+import Settings from "./Settings";
 
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      config: [
-        { generator: Addition, weight: 5 },
-        { generator: Multiplication, weight: 5 },
-        { generator: Subtraction, weight: 5 },
-        { generator: Division, weight: 5 },
-        { generator: NimberAddition, weight: 5 },
-      ],
+      settings: {
+        generators: [
+          { generator: Addition, weight: 5 },
+          { generator: Multiplication, weight: 5 },
+          { generator: Subtraction, weight: 5 },
+          { generator: Division, weight: 5 },
+          { generator: NimberAddition, weight: 5 },
+        ],
+        shouldRepeatQuestion: true,
+        shouldRepeatAnswer: false,
+        repeatQuestionDelay: 2,
+        repeatAnswerDelay: 2,
+        timeBetweenQuestions: 10,
+        voice: window.speechSynthesis
+          .getVoices()
+          .find((voice) => voice.lang.startsWith("en")),
+      },
     };
+
+    this.updateSetting = this.updateSetting.bind(this);
   }
 
-  componentDidMount() {
-    EasySpeech.init({ maxTimeout: 5000, interval: 250 })
-      .then(() => console.debug("Speech synthesis loaded."))
-      .catch((e) => console.error(e));
+  updateSetting(key, value) {
+    let settings = { ...this.state.settings };
+    settings[key] = value;
 
-    EasySpeech.defaults({
-      voice: EasySpeech.voices().find((voice) => voice.lang.startsWith("en")),
-    });
+    this.setState({ settings: settings });
   }
+
+  componentDidMount() {}
 
   render() {
     return (
       <div className="App">
         <Header />
-        <Study config={this.state.config} />
+        <Settings
+          settings={this.state.settings}
+          updateSetting={this.updateSetting}
+        />
+        <Study settings={this.state.settings} />
       </div>
     );
   }
