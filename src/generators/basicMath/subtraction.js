@@ -15,7 +15,12 @@ function generator(args) {
   );
 }
 
-export default new Generator("Subtraction", "", generator, [
-  new Argument("maxOperand", "Max Operand", 1, 10_000, 200),
-  new Argument("answerSaidDelay", "Time before saying answer", 0, 120, 10),
-]);
+export default new Generator(
+  "Subtraction",
+  "Practice subtracting two numbers.",
+  generator,
+  [
+    new Argument("maxOperand", "Max Operand", 1, 10_000, 200),
+    new Argument("answerSaidDelay", "Time before saying answer", 0, 120, 10),
+  ]
+);

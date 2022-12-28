@@ -15,7 +15,12 @@ function generator(args) {
   );
 }
 
-export default new Generator("Multiplication", "", generator, [
-  new Argument("maxOperand", "Max Operand", 1, 100, 20),
-  new Argument("answerSaidDelay", "Time beafore saying answer", 0, 120, 10),
-]);
+export default new Generator(
+  "Multiplication",
+  "Practice multiplying two numbers together.",
+  generator,
+  [
+    new Argument("maxOperand", "Max Operand", 1, 100, 20),
+    new Argument("answerSaidDelay", "Time beafore saying answer", 0, 120, 10),
+  ]
+);

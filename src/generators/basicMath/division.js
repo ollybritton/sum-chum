@@ -19,9 +19,14 @@ function generator(args) {
   );
 }
 
-export default new Generator("Multiplication", "", generator, [
-  new Argument("maxNumerator", "Max Numerator", 1, 1_000, 200),
-  new Argument("maxDenominator", "Max Denominator", 1, 1_000, 100),
-  new Argument("decimalPlaces", "Decimal Places", 1, 5, 1),
-  new Argument("answerSaidDelay", "Time beafore saying answer", 0, 120, 10),
-]);
+export default new Generator(
+  "Division",
+  "Practice dividing two numbers to an specified number of decimal places.",
+  generator,
+  [
+    new Argument("maxNumerator", "Max Numerator", 1, 1_000, 200),
+    new Argument("maxDenominator", "Max Denominator", 1, 1_000, 100),
+    new Argument("decimalPlaces", "Decimal Places", 1, 5, 1),
+    new Argument("answerSaidDelay", "Time beafore saying answer", 0, 120, 15),
+  ]
+);

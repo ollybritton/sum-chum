@@ -1,6 +1,7 @@
 import { toHaveDescription } from "@testing-library/jest-dom/dist/matchers";
 import EasySpeech from "easy-speech";
 import { React, Component, cloneElement } from "react";
+import optionsData from "./options.js";
 
 export default class Settings extends Component {
   constructor(props) {
@@ -63,6 +64,45 @@ export default class Settings extends Component {
         </option>
       );
     });
+
+    let generatorOptions = [];
+
+    for (let key in optionsData) {
+      let category = optionsData[key];
+      let categoryEl = [];
+
+      for (let i in category) {
+        let generator = category[i];
+        categoryEl.push(
+          <div className="ba container ma2">
+            <h5 key={`${key}${generator.title}`}>{generator.title}</h5>
+            <p>{generator.description}</p>
+            <button>Add</button>
+          </div>
+        );
+      }
+
+      generatorOptions.push(
+        <div key={key}>
+          <h4>{key}</h4>
+          {categoryEl}
+        </div>
+      );
+    }
+
+    let currentOptions = [];
+
+    for (let i in this.props.settings.generators) {
+      let generator = this.props.settings.generators[i].generator;
+      let weight = this.props.settings.generators[i].weight;
+      currentOptions.push(
+        <div className="ba ma2">
+          <strong>{generator.title}</strong>, weight {weight}
+          <br />
+          <button>Remove</button>
+        </div>
+      );
+    }
 
     return (
       <div className="Settings">
@@ -143,6 +183,13 @@ export default class Settings extends Component {
         <select id="Settings-voice" onChange={this.updateVoice}>
           {voiceOptions}
         </select>
+
+        <h1>Generators</h1>
+        <h2>Current</h2>
+        {currentOptions}
+
+        <h2>Options</h2>
+        {generatorOptions}
       </div>
     );
   }

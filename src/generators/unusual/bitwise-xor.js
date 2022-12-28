@@ -8,7 +8,7 @@ function generator(args) {
 
   return new Exercise(
     `What is $${a} \\oplus ${b}$?`,
-    `What is the nimber addition of ${a} plus ${b}?`,
+    `What is ${a} X or ${b}?`,
     `$${c}$`,
     `${c}`,
     args.answerSaidDelay
@@ -16,11 +16,11 @@ function generator(args) {
 }
 
 export default new Generator(
-  "Nimber Addition",
-  "The addition of nimbers, which are special in combinatorial game theory. To find the result, XOR both numbers together.",
+  "Bitwise XOR",
+  "Practice finding the bitwise XOR of two numbers. Useful if you're playing Nim.",
   generator,
   [
-    new Argument("maxOperand", "Max Addend", 0, 100, 15),
+    new Argument("maxOperand", "Max Addend", 0, 100, 31),
     new Argument("answerSaidDelay", "Time before saying answer", 0, 120, 20),
   ]
 );

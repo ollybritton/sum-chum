@@ -6,7 +6,7 @@ import Study from "./Study";
 import EasySpeech from "easy-speech";
 import Subtraction from "./generators/basicMath/subtraction";
 import Division from "./generators/basicMath/division";
-import NimberAddition from "./generators/unusual/nimber-addition";
+import BitwiseXOR from "./generators/unusual/bitwise-xor";
 import Settings from "./Settings";
 
 class App extends Component {
@@ -20,7 +20,7 @@ class App extends Component {
           { generator: Multiplication, weight: 5 },
           { generator: Subtraction, weight: 5 },
           { generator: Division, weight: 5 },
-          { generator: NimberAddition, weight: 5 },
+          { generator: BitwiseXOR, weight: 5 },
         ],
         shouldRepeatQuestion: true,
         shouldRepeatAnswer: false,
