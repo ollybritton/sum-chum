@@ -19,6 +19,8 @@ export default class Settings extends Component {
     this.updateTimeBetweenQuestions =
       this.updateTimeBetweenQuestions.bind(this);
     this.updateVoice = this.updateVoice.bind(this);
+
+    this.removeGenerator = this.removeGenerator.bind(this);
   }
 
   updateShouldRepeatQuestion() {
@@ -29,7 +31,6 @@ export default class Settings extends Component {
   }
 
   updateRepeatQuestionDelay(e) {
-    console.log(e);
     this.props.updateSetting("repeatQuestionDelay", e.target.value);
   }
 
@@ -41,7 +42,6 @@ export default class Settings extends Component {
   }
 
   updateRepeatAnswerDelay(e) {
-    console.log(e);
     this.props.updateSetting("repeatAnswerDelay", e.target.value);
   }
 
@@ -56,10 +56,44 @@ export default class Settings extends Component {
     );
   }
 
+  removeGenerator(index) {
+    let func = (e) => {
+      this.props.updateSetting(
+        "generators",
+        this.props.settings.generators.filter((_, i) => i != index)
+      );
+    };
+
+    func.bind(this);
+
+    return func;
+  }
+
+  addGenerator(generator) {
+    let i = this.props.settings.generators.findIndex(
+      (g) => g.generator.title == generator.title
+    );
+
+    if (i >= 0) {
+      // this.props.settings.generators[i].weight += 5;
+    } else {
+      this.props.updateSetting(
+        "generators",
+        this.props.settings.generators.concat({
+          generator: generator,
+          weight: 5,
+        })
+      );
+    }
+  }
+
   render() {
     let voiceOptions = this.state.voices.map((voice) => {
       return (
-        <option value={voice.voiceURI}>
+        <option
+          value={voice.voiceURI}
+          selected={voice.voiceURI == this.props.settings.voice.voiceURI}
+        >
           {voice.name} ({voice.lang})
         </option>
       );
@@ -74,10 +108,12 @@ export default class Settings extends Component {
       for (let i in category) {
         let generator = category[i];
         categoryEl.push(
-          <div className="ba container ma2">
-            <h5 key={`${key}${generator.title}`}>{generator.title}</h5>
+          <div className="ba container pa2 mb2">
+            <h5 className="mt0" key={`${key}${generator.title}`}>
+              {generator.title}
+            </h5>
             <p>{generator.description}</p>
-            <button>Add</button>
+            <button onClick={(e) => this.addGenerator(generator)}>Add</button>
           </div>
         );
       }
@@ -92,21 +128,25 @@ export default class Settings extends Component {
 
     let currentOptions = [];
 
-    for (let i in this.props.settings.generators) {
+    for (let i = 0; i < this.props.settings.generators.length; i++) {
       let generator = this.props.settings.generators[i].generator;
       let weight = this.props.settings.generators[i].weight;
+
       currentOptions.push(
-        <div className="ba ma2">
+        <div
+          className="ba pa2 mb2"
+          key={this.props.settings.generators[i].title}
+        >
           <strong>{generator.title}</strong>, weight {weight}
           <br />
-          <button>Remove</button>
+          <button onClick={this.removeGenerator(i)}>Remove</button>
         </div>
       );
     }
 
     return (
       <div className="Settings">
-        <h1>Settings</h1>
+        <h1>Settings ⚙️</h1>
 
         <input
           type="checkbox"
@@ -114,13 +154,15 @@ export default class Settings extends Component {
           onChange={this.updateShouldRepeatQuestion}
           id="Settings-shouldRepeatQuestion"
         />
-        <label htmlFor="Settings-shouldRepeatQuestion">
+        <label className="di" htmlFor="Settings-shouldRepeatQuestion">
+          {" "}
           Should repeat question:{" "}
           {this.props.settings.shouldRepeatQuestion ? "yes" : "no"}
         </label>
 
-        <br />
-
+        <label className="db" htmlFor="Settings-repeatQuestionDelay">
+          Repeat question after: {this.props.settings.repeatQuestionDelay}s
+        </label>
         <input
           type="range"
           min="0"
@@ -130,10 +172,8 @@ export default class Settings extends Component {
           id="Settings-repeatQuestionDelay"
           disabled={!this.props.settings.shouldRepeatQuestion}
         />
-        <label htmlFor="Settings-repeatQuestionDelay">
-          Repeat question after: {this.props.settings.repeatQuestionDelay}s
-        </label>
 
+        <br />
         <br />
 
         <input
@@ -142,13 +182,15 @@ export default class Settings extends Component {
           onChange={this.updateShouldRepeatAnswer}
           id="Settings-shouldRepeatAnswer"
         />
-        <label htmlFor="Settings-shouldRepeatAnswer">
+        <label className="di" htmlFor="Settings-shouldRepeatAnswer">
+          {" "}
           Should repeat answer:{" "}
           {this.props.settings.updateShouldRepeatAnswer ? "yes" : "no"}
         </label>
 
-        <br />
-
+        <label className="db" htmlFor="Settings-repeatAnswerDelay">
+          Repeat answer after: {this.props.settings.repeatAnswerDelay}s
+        </label>
         <input
           type="range"
           min="0"
@@ -158,12 +200,13 @@ export default class Settings extends Component {
           id="Settings-repeatAnswerDelay"
           disabled={!this.props.settings.shouldRepeatAnswer}
         />
-        <label htmlFor="Settings-repeatAnswerDelay">
-          Repeat answer after: {this.props.settings.repeatAnswerDelay}s
-        </label>
 
         <br />
+        <br />
 
+        <label className="db" htmlFor="Settings-timeBetweenQuestions">
+          Time between questions: {this.props.settings.timeBetweenQuestions}s
+        </label>
         <input
           type="range"
           min="0"
@@ -173,18 +216,16 @@ export default class Settings extends Component {
           id="Settings-timeBetweenQuestions"
           disabled={!this.props.settings.timeBetweenQuestions}
         />
-        <label htmlFor="Settings-timeBetweenQuestions">
-          Time between questions: {this.props.settings.timeBetweenQuestions}s
-        </label>
 
         <br />
+        <br />
 
-        <label htmlFor="Settings-voice">Voice:</label>
+        <label htmlFor="Settings-voice">Voice: </label>
         <select id="Settings-voice" onChange={this.updateVoice}>
           {voiceOptions}
         </select>
 
-        <h1>Generators</h1>
+        <h1>Generators 🤖</h1>
         <h2>Current</h2>
         {currentOptions}
 
